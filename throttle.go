@@ -1,3 +1,5 @@
+// @module github.com/117/throttle@v0.0.3
+
 package throttle
 
 import (
@@ -34,5 +36,13 @@ func (t *Throttle) Error(exec func()) error {
 func (t *Throttle) Sleep(exec func()) {
 	if t.Error(exec) != nil {
 		time.Sleep(t.Duration - time.Since(t.stamp))
+	}
+}
+
+// NewThrottle creates a new throttle with the provided limit and duration.
+func NewThrottle(limit int, duration time.Duration) *Throttle {
+	return &Throttle{
+		Limit:    limit,
+		Duration: duration,
 	}
 }
