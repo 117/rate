@@ -1,37 +1,38 @@
 package throttle
 
 import (
-	"fmt"
+	"errors"
 	"time"
 )
 
-var cooldowns map[string]time.Time
+// Throttle is a wrapper for limiting the number of executions for a specified rolling duration.
+type Throttle struct {
+	Duration time.Duration
+	Limit    int
 
-// Func -
-func Func(key string, duration time.Duration, do func()) error {
-	if _, has := cooldowns[key]; !has {
-		cooldowns[key] = time.Now()
-	}
-
-	if time.Since(cooldowns[key]) > duration {
-		cooldowns[key] = time.Now()
-		do()
-		return nil
-	}
-
-	return fmt.Errorf("key %s has been throttled", key)
+	stamp  time.Time
+	called int
 }
 
-// Key -
-func Key(key string, duration time.Duration) error {
-	if _, has := cooldowns[key]; !has {
-		cooldowns[key] = time.Now()
+// Error returns an error if execution has been throttled.
+func (t *Throttle) Error(exec func()) error {
+	if t.stamp.IsZero() || t.Duration-time.Since(t.stamp) < 0 {
+		t.stamp = time.Now()
+		t.called = 0
 	}
 
-	if time.Since(cooldowns[key]) > duration {
-		cooldowns[key] = time.Now()
-		return nil
+	if t.called >= t.Limit {
+		return errors.New("throttle was triggered")
 	}
 
-	return fmt.Errorf("key %s has been throttled", key)
+	exec()
+	t.called++
+	return nil
+}
+
+// Sleep blocks until the throttle is over.
+func (t *Throttle) Sleep(exec func()) {
+	if t.Error(exec) != nil {
+		time.Sleep(t.Duration - time.Since(t.stamp))
+	}
 }
