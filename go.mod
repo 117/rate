@@ -1,5 +1,5 @@
-module github.com/117/throttle
+module github.com/117/rate
 
 go 1.13
 
-require github.com/google/uuid v1.1.1 // indirect
+require github.com/117/throttle v0.0.3 // indirect

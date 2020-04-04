@@ -1,2 +1,1 @@
-# throttle
- 
+# rate

@@ -1,2 +1,4 @@
+github.com/117/throttle v0.0.3 h1:vc6Hfr5odSR3WgfGGrZ7lHs7iA3BcAg3imEFDMFIxas=
+github.com/117/throttle v0.0.3/go.mod h1:LN6BLIgsMDtvJqK1ozC3qGGcSucZFGqW5rli8F377i0=
 github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
 github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
