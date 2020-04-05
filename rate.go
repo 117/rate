@@ -1,4 +1,4 @@
-// @module github.com/117/rate@v0.0.4
+// @module github.com/117/rate@v0.0.5
 
 package rate
 
