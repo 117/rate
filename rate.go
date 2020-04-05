@@ -1,4 +1,4 @@
-// @module github.com/117/rate@v0.0.3
+// @module github.com/117/rate@v0.0.4
 
 package rate
 
@@ -15,8 +15,8 @@ type Limiter struct {
 	called   int
 }
 
-// Error returns an error if the call limit for the duration has been reached.
-func (l *Limiter) Error(exec func()) error {
+// ErrorIfRateExceeded returns an error if the call limit for the duration has been reached.
+func (l *Limiter) ErrorIfRateExceeded(exec func()) error {
 	if l.stamp.IsZero() || l.Duration-time.Since(l.stamp) < 0 {
 		l.stamp = time.Now()
 		l.called = 0
@@ -31,9 +31,9 @@ func (l *Limiter) Error(exec func()) error {
 	return nil
 }
 
-// Sleep blocks until the throttle is over.
-func (l *Limiter) Sleep(exec func()) {
-	if l.Error(exec) != nil {
+// SleepIfRateExceeded blocks execution until the rate limit is no longer exceeded.
+func (l *Limiter) SleepIfRateExceeded(exec func()) {
+	if l.ErrorIfRateExceeded(exec) != nil {
 		time.Sleep(l.Duration - time.Since(l.stamp))
 	}
 }
